@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Hana Up | Digital Market</title>
+    
+       <!-- ========== FAVICON CUSTOM ========== -->
+    <!-- GANTI LINK DI BAWAH INI DENGAN LINK GAMBAR JPG/PNG ANDA -->
+    <link rel="icon" type="image/jpeg" href="https://files.catbox.moe/3kdcas.jpg">
+    <link rel="shortcut icon" type="image/jpeg" href="https://files.catbox.moe/3kdcas.jpg">
+    <link rel="apple-touch-icon" href="https://files.catbox.moe/3kdcas.jpg">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Poppins', system-ui, sans-serif;
+            background: #0A0D14;
+            color: #FFFFFF;
+            overflow-x: hidden;
+        }
+
+        /* DYNAMIC GRADIENT BACKGROUND */
+        .dynamic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: linear-gradient(125deg, #0A0D14 0%, #12182A 50%, #0B1020 100%);
+        }
+
+        .dynamic-bg::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 30%, rgba(43,126,255,0.08) 0%, transparent 60%);
+            animation: slowMove 18s infinite alternate;
+        }
+
+        @keyframes slowMove {
+            0% { opacity: 0.4; transform: scale(1); }
+            100% { opacity: 0.8; transform: scale(1.2); }
+        }
+
+        /* ========== LOADING ========== */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #070A12;
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-box {
+            text-align: center;
+        }
+
+        .loading-circle {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 24px;
+            background: linear-gradient(145deg, #111A28, #080D18);
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading-circle::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(135deg, #2B7EFF, #8B5CF6, #2B7EFF);
+            border-radius: 42px;
+            z-index: -1;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-circle img {
+            width: 55%;
+        }
+
+        .loading-title {
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FFFFFF, #A5BBFF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .loading-sub {
+            font-size: 12px;
+            color: #6C7D9E;
+        }
+
+        .loading-bar {
+            width: 220px;
+            height: 3px;
+            background: #1A2135;
+            border-radius: 4px;
+            margin: 24px auto 0;
+            overflow: hidden;
+        }
+
+        .loading-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #2B7EFF, #8B5CF6);
+            transition: width 0.15s linear;
+        }
+
+        /* MAIN APP */
+        .app-container {
+            display: none;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px 50px 24px;
+        }
+
+        /* HEADER */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 0 20px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo-area h1 {
+            font-size: 44px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FFFFFF, #C5D5FF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-area p {
+            font-size: 13px;
+            color: #8A99BD;
+            margin-top: 4px;
+        }
+
+        .logo-box {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(145deg, #121A2A, #080D18);
+            border-radius: 20px;
+            border: 1px solid rgba(43,126,255,0.3);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* BANNER PROMO */
+        .promo-banner {
+            background: linear-gradient(105deg, #0F1728, #0A1020);
+            border-radius: 32px;
+            padding: 20px 24px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(43,126,255,0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .promo-text h3 {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .promo-text p {
+            font-size: 13px;
+            color: #9AABD0;
+        }
+
+        .promo-badge {
+            background: #2B7EFF20;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #5C9EFF;
+        }
+
+        /* MENU GRID - BENTUK KARTU HORIZONTAL YANG UNIK */
+        .menu-category {
+            margin-bottom: 48px;
+        }
+
+        .category-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .category-title .line {
+            width: 40px;
+            height: 3px;
+            background: #2B7EFF;
+            border-radius: 3px;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        @media (max-width: 650px) {
+            .app-container { padding: 0 20px 40px 20px; }
+            .logo-area h1 { font-size: 32px; }
+            .card-grid { grid-template-columns: 1fr; }
+        }
+
+        /* DESAIN KARTU YANG BERBEDA - EFEK KACA DENGAN BORDER GRADASI */
+        .service-card {
+            background: rgba(12, 18, 30, 0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 28px;
+            padding: 18px 22px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(43, 126, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(43,126,255,0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .service-card:hover::before {
+            left: 100%;
+        }
+
+        .service-card:hover {
+            background: rgba(20, 28, 48, 0.8);
+            border-color: rgba(43, 126, 255, 0.5);
+            transform: translateY(-4px);
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #1E2A48, #121A30);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 14px;
+        }
+
+        .card-name {
+            font-weight: 700;
+            font-size: 17px;
+            margin-bottom: 8px;
+        }
+
+        .card-price {
+            font-size: 16px;
+            font-weight: 700;
+            color: #4C9AFF;
+        }
+
+        .card-price small {
+            font-weight: 500;
+            color: #8A99BD;
+            font-size: 12px;
+        }
+
+        /* PURCHASE SECTION - DESAIN SEGITIGA / UNIK */
+        .purchase-section {
+            background: linear-gradient(145deg, #0D1324, #080D1A);
+            border-radius: 48px;
+            padding: 32px 30px;
+            border: 1px solid rgba(43,126,255,0.25);
+            animation: riseUp 0.45s ease;
+        }
+
+        @keyframes riseUp {
+            from { opacity: 0; transform: translateY(30px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .back-action {
+            background: #1A2338;
+            border: none;
+            color: #C5D5FF;
+            padding: 8px 22px;
+            border-radius: 40px;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 28px;
+            transition: 0.2s;
+        }
+
+        .back-action:hover {
+            background: #2B7EFF;
+            color: white;
+        }
+
+        .input-field {
+            margin-bottom: 24px;
+        }
+
+        .input-field label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #BECEF0;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .input-field input {
+            width: 100%;
+            background: #03070F;
+            border: 1.5px solid #2A3448;
+            border-radius: 24px;
+            padding: 14px 18px;
+            font-size: 15px;
+            color: white;
+            transition: 0.2s;
+        }
+
+        .input-field input:focus {
+            outline: none;
+            border-color: #2B7EFF;
+            box-shadow: 0 0 0 2px rgba(43,126,255,0.2);
+        }
+
+        .total-card {
+            background: linear-gradient(105deg, #060B16, #0C1222);
+            border-radius: 28px;
+            padding: 16px 22px;
+            margin: 22px 0;
+            display: flex;
+            justify-content: space-between;
+            font-weight: 800;
+            font-size: 21px;
+            color: #4C9AFF;
+            border: 1px solid #2B4A7A;
+        }
+
+        .qris-card {
+            background: #060B16;
+            border-radius: 28px;
+            text-align: center;
+            padding: 18px;
+            margin: 24px 0;
+            border: 1px dashed #3B5D8F;
+        }
+
+        .qris-card img {
+            max-width: 180px;
+            width: 100%;
+            border-radius: 20px;
+            background: white;
+            padding: 6px;
+        }
+
+        .btn-submit {
+            background: linear-gradient(95deg, #2B7EFF, #6B3AFF);
+            width: 100%;
+            border: none;
+            padding: 16px;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 16px;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 8px 20px rgba(43,126,255,0.3);
+        }
+
+        .btn-submit:hover {
+            transform: scale(0.98);
+            filter: brightness(1.05);
+        }
+
+        /* SOCIAL SECTION */
+        .social-row {
+            margin-top: 40px;
+            padding: 14px 24px;
+            background: rgba(6, 11, 20, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .tiktok-link {
+            background: #000000aa;
+            padding: 8px 22px;
+            border-radius: 40px;
+            text-decoration: none;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        .tiktok-link:hover {
+            background: #2B7EFF;
+        }
+
+        /* FLOATING WHATSAPP */
+        .wa-float {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(145deg, #25D366, #0F9B5E);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 6px 20px rgba(37,211,102,0.5);
+            transition: 0.2s;
+            animation: bounce 1.5s infinite;
+        }
+
+        @keyframes bounce {
+            0%,100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .wa-float:hover {
+            transform: scale(1.1);
+        }
+
+        /* PAGE TRANSITION */
+        .page {
+            transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.2), opacity 0.3s;
+        }
+
+        .page.slide-out {
+            transform: translateX(-30px);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .page.slide-in {
+            transform: translateX(30px);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* MODAL */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.92);
+            backdrop-filter: blur(16px);
+            z-index: 11000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.2s;
+        }
+
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-card {
+            background: linear-gradient(145deg, #121A2A, #090E1C);
+            border-radius: 48px;
+            max-width: 340px;
+            width: 86%;
+            padding: 28px 24px;
+            text-align: center;
+            border: 1px solid #2B7EFF60;
+            transform: scale(0.92);
+            transition: transform 0.25s cubic-bezier(0.2, 1.2, 0.4, 1);
+        }
+
+        .modal.active .modal-card {
+            transform: scale(1);
+        }
+
+        .modal-card h3 {
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+
+        .modal-card p {
+            color: #B0C0E0;
+            margin: 14px 0;
+        }
+
+        .modal-btn {
+            background: linear-gradient(95deg, #2B7EFF, #6B3AFF);
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+        }
+
+        .modal-btn.cancel {
+            background: #2A334E;
+            margin-top: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="dynamic-bg"></div>
+
+<!-- LOADING -->
+<div class="loading-screen" id="loadingScreen">
+    <div class="loading-box">
+        <div class="loading-circle">
+            <img id="loadLogoImg" src="https://files.catbox.moe/3kdcas.jpg" alt="Logo">
+        </div>
+        <div class="loading-title">HANA UP</div>
+        <div class="loading-sub">Digital Market Andalan Ku</div>
+        <div class="loading-bar"><div class="loading-fill" id="loadFill"></div></div>
+    </div>
+</div>
+
+<!-- MAIN APP -->
+<div class="app-container" id="appMain">
+    <div class="header">
+        <div class="logo-area">
+            <h1>Hana Up</h1>
+            <p>Digital Market Andalan Ku</p>
+        </div>
+        <div class="logo-box">
+            <img id="cornerLogoImg" src="https://files.catbox.moe/3kdcas.jpg" alt="Logo">
+        </div>
+    </div>
+
+    <!-- PROMO BANNER -->
+    <div class="promo-banner">
+        <div class="promo-text">
+            <h3>Suntik Sosmed Aman & Terpercaya 100%</h3>
+            <p>Proses Cepat & Instant Delivery Hanya Di HanaUp Sosmed</p>
+        </div>
+        <div class="promo-badge">#1 Top Rated</div>
+    </div>
+
+    <!-- PAGE 1: MENU -->
+    <div id="menuPage" class="page">
+        <div class="menu-category">
+            <div class="category-title"><span class="line"></span> Instagram Services</div>
+            <div class="card-grid" id="igCardGrid"></div>
+        </div>
+        <div class="menu-category">
+            <div class="category-title"><span class="line"></span> TikTok Services</div>
+            <div class="card-grid" id="ttCardGrid"></div>
+        </div>
+    </div>
+
+    <!-- PAGE 2: PURCHASE -->
+    <div id="purchasePage" class="page purchase-section" style="display: none;">
+        <button class="back-action" id="backBtn">← Kembali</button>
+        <h3 style="font-size: 26px; font-weight: 800; margin-bottom: 24px;" id="serviceNameSelected">Instagram Followers</h3>
+        
+        <div class="input-field">
+            <label>Username / Link Video</label>
+            <input type="text" id="targetInputField" placeholder="contoh: @hanaup atau link tiktok">
+        </div>
+        
+        <div class="input-field">
+            <label>Jumlah Pembelian Di Atas 100</label>
+            <input type="number" id="qtyField" value="100" min="1" step="1">
+            <div style="font-size: 12px; color: #8A99BD; margin-top: 6px;">*harga akan berubah otomatis</div>
+        </div>
+        
+        <div class="total-card">
+            <span>Total Harga</span>
+            <span id="totalPriceText">Rp 0</span>
+        </div>
+        
+        <div class="qris-card">
+            <p style="margin-bottom: 10px;">💳 Scan QRIS untuk pembayaran</p>
+            <img id="qrisImage" src="https://files.catbox.moe/mdmkzt.jpg" alt="QRIS">
+            <p style="margin-top: 6px; font-size: 10px;">QRIS Resmi · Hana Up Payment</p>
+        </div>
+        
+        <button class="btn-submit" id="submitOrderBtn">✅ Selesai & Kirim ke WhatsApp</button>
+        
+        <div class="social-row">
+            <span style="display: flex; gap: 8px;">🎵 TikTok Official :</span>
+            <a href="https://www.tiktok.com/@hanaup.sosmed" target="_blank" class="tiktok-link">
+                @hanaup.sosmed
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6m4-3h6v6m-11 5L21 3"/></svg>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- FLOATING WHATSAPP -->
+<div class="wa-float" id="waFloatBtn">
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M12.031 2c-5.514 0-10 4.486-10 10 0 1.79.487 3.479 1.336 4.964L2.06 21.96l5.064-1.297A9.958 9.958 0 0012.032 22c5.514 0 10-4.486 10-10s-4.486-10-10-10zm0 18c-1.593 0-3.091-.474-4.358-1.287l-.313-.19-3.009.772.775-2.986-.195-.317A7.97 7.97 0 014.032 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8zM8.576 7.035c.202 0 .404.012.605.012.171 0 .342-.012.513-.024.186-.024.373-.145.48-.333l.676-1.286c.119-.223.107-.486-.024-.702l-.824-1.324c-.166-.274-.486-.405-.79-.335a7.984 7.984 0 00-3.397 1.796c-.294.25-.539.536-.738.848-.202.318-.357.663-.467 1.024-.108.357-.167.726-.179 1.097-.012.607.089 1.208.28 1.78.19.571.466 1.107.822 1.583.356.476.786.89 1.273 1.226.487.337 1.023.595 1.583.77.558.175 1.142.262 1.726.262.607 0 1.202-.13 1.75-.379.548-.25 1.036-.607 1.454-1.047.393-.405.69-.896.873-1.427.18-.531.238-1.082.167-1.618-.071-.536-.261-1.047-.559-1.487-.297-.44-.69-.786-1.154-1.023-.464-.238-.982-.345-1.499-.345-.356 0-.702.071-1.023.214-.32.143-.595.357-.821.619-.226.262-.393.56-.5.883-.107.322-.154.655-.143.988.011.333.071.657.18.964.108.308.262.595.464.845.202.25.44.464.702.631.262.167.56.286.872.345.311.06.631.071.94.036.31-.036.607-.13.883-.274.275-.143.524-.333.738-.56.214-.226.38-.488.5-.772.119-.285.179-.583.179-.881 0-.297-.06-.595-.179-.88-.119-.284-.286-.547-.5-.772-.214-.226-.463-.417-.738-.56-.276-.143-.573-.238-.883-.274-.31-.036-.63-.024-.94.036-.311.06-.607.179-.872.345-.262.167-.5.381-.702.631-.202.25-.356.536-.464.845-.108.308-.167.631-.18.964-.011.333.036.666.143.988.108.322.274.619.5.883.226.262.5.476.821.619.321.143.667.214 1.023.214.417 0 .833-.083 1.214-.238.381-.155.714-.393.988-.69.274-.298.488-.655.631-1.047.143-.393.214-.809.214-1.226 0-.607-.119-1.202-.345-1.75-.226-.548-.548-1.023-.94-1.427-.393-.405-.857-.702-1.369-.916-.511-.214-1.059-.321-1.607-.321z"/></svg>
+</div>
+
+<!-- MODAL -->
+<div id="modal" class="modal">
+    <div class="modal-card">
+        <h3>📦 Konfirmasi</h3>
+        <p id="modalMsg">Kirim pesanan ke WhatsApp?</p>
+        <button class="modal-btn" id="modalConfirmBtn">Ya, Kirim</button>
+        <button class="modal-btn cancel" id="modalCancelBtn">Batal</button>
+    </div>
+</div>
+
+<script>
+    // DATA LAYANAN
+    const servicesList = [
+        { id:1, name:"Followers Instagram Global", cat:"ig", price:20, unit:"Followers" },
+        { id:2, name:"Followers Instagram Indonesia", cat:"ig", price:25, unit:"Followers" },
+        { id:3, name:"Like Instagram", cat:"ig", price:35, unit:"Likes" },
+        { id:4, name:"Komentar Instagram Indonesia", cat:"ig", price:55, unit:"Komentar" },
+        { id:5, name:"Views Instagrak Indonesia Wanita", cat:"ig", price:140, unit:"Views" },
+        { id:6, name:"TikTok Like", cat:"tt", price:30, unit:"Like" },
+        { id:7, name:"TikTok Followers Global", cat:"tt", price:56, unit:"Followers" },
+        { id:8, name:"TikTok Followers Indo", cat:"tt", price:140, unit:"Followers" },
+        { id:9, name:"TikTok View", cat:"tt", price:5, unit:"Views" }
+    ];
+
+    let selectedService = null;
+
+    function getIcon(cat) {
+        if(cat === 'ig') {
+            return `<svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.068.28 2.552.47.64.25 1.1.55 1.58 1.03.48.48.78.94 1.03 1.58.19.484.408 1.186.47 2.552.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.28 2.068-.47 2.552-.25.64-.55 1.1-1.03 1.58-.48.48-.94.78-1.58 1.03-.484.19-1.186.408-2.552.47-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.068-.28-2.552-.47-.64-.25-1.1-.55-1.58-1.03-.48-.48-.78-.94-1.03-1.58-.19-.484-.408-1.186-.47-2.552-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.062-1.366.28-2.068.47-2.552.25-.64.55-1.1 1.03-1.58.48-.48.94-.78 1.58-1.03.484-.19 1.186-.408 2.552-.47 1.266-.058 1.646-.07 4.85-.07z" fill="#FFFFFF"/><path d="M12 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8z" fill="#FFFFFF"/><circle cx="18.406" cy="5.594" r="1.44" fill="#FFFFFF"/></svg>`;
+        } else {
+            return `<svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M19.59 6.69a4.83 4.83 0 01-3.37-1.7 4.83 4.83 0 01-1.7-3.37h-1.6a6.44 6.44 0 002.27 4.5 6.44 6.44 0 004.5 2.27v1.6a4.83 4.83 0 01-3.37-1.7 4.83 4.83 0 01-1.7-3.37h-1.6a6.44 6.44 0 002.27 4.5 6.44 6.44 0 004.5 2.27z" fill="#FFFFFF"/></svg>`;
+        }
+    }
+
+    function renderCards() {
+        const igGrid = document.getElementById('igCardGrid');
+        const ttGrid = document.getElementById('ttCardGrid');
+        igGrid.innerHTML = '';
+        ttGrid.innerHTML = '';
+
+        servicesList.forEach(s => {
+            const card = document.createElement('div');
+            card.className = 'service-card';
+            card.innerHTML = `
+                <div class="card-icon">${getIcon(s.cat)}</div>
+                <div class="card-name">${s.name}</div>
+                <div class="card-price">Rp ${s.price.toLocaleString('id-ID')} <small>/ ${s.unit}</small></div>
+            `;
+            card.onclick = () => {
+                selectedService = s;
+                document.getElementById('serviceNameSelected').innerHTML = s.name;
+                document.getElementById('qtyField').value = 100;
+                updateTotalPrice();
+                slideTo('purchase');
+            };
+            if(s.cat === 'ig') igGrid.appendChild(card);
+            else ttGrid.appendChild(card);
+        });
+    }
+
+    function updateTotalPrice() {
+        if(!selectedService) return;
+        let qty = parseInt(document.getElementById('qtyField').value);
+        if(isNaN(qty) || qty < 1) qty = 1;
+        const total = qty * selectedService.price;
+        document.getElementById('totalPriceText').innerHTML = `Rp ${total.toLocaleString('id-ID')}`;
+    }
+
+    function slideTo(dest) {
+        const menuDiv = document.getElementById('menuPage');
+        const purchaseDiv = document.getElementById('purchasePage');
+        if(dest === 'purchase') {
+            menuDiv.classList.add('slide-out');
+            setTimeout(() => {
+                menuDiv.style.display = 'none';
+                purchaseDiv.style.display = 'block';
+                purchaseDiv.classList.remove('slide-out');
+                purchaseDiv.classList.add('slide-out');
+                setTimeout(() => purchaseDiv.classList.remove('slide-out'), 20);
+            }, 280);
+        } else {
+            purchaseDiv.classList.add('slide-out');
+            setTimeout(() => {
+                purchaseDiv.style.display = 'none';
+                menuDiv.style.display = 'block';
+                menuDiv.classList.remove('slide-out');
+                menuDiv.classList.add('slide-out');
+                setTimeout(() => menuDiv.classList.remove('slide-out'), 20);
+            }, 280);
+        }
+    }
+
+    function showModal(msg, onConfirm) {
+        const modal = document.getElementById('modal');
+        document.getElementById('modalMsg').innerText = msg;
+        modal.classList.add('active');
+        const confirmBtn = document.getElementById('modalConfirmBtn');
+        const cancelBtn = document.getElementById('modalCancelBtn');
+        const close = () => {
+            modal.classList.remove('active');
+            confirmBtn.removeEventListener('click', confirmHandler);
+            cancelBtn.removeEventListener('click', cancelHandler);
+        };
+        const confirmHandler = () => { close(); onConfirm(); };
+        const cancelHandler = () => close();
+        confirmBtn.addEventListener('click', confirmHandler, { once: true });
+        cancelBtn.addEventListener('click', cancelHandler, { once: true });
+    }
+
+    function finishOrder() {
+        if(!selectedService) { alert("Pilih layanan dulu"); return; }
+        const target = document.getElementById('targetInputField').value.trim();
+        if(target === "") { alert("Isi username / link video"); return; }
+        let qty = parseInt(document.getElementById('qtyField').value);
+        if(isNaN(qty) || qty < 1) qty = 1;
+        const total = qty * selectedService.price;
+        const waMsg = `Halo Hana Up%0A%0ASaya order:%0A📌 Layanan: ${selectedService.name}%0A🔗 Target: ${target}%0A🔢 Jumlah: ${qty} ${selectedService.unit}%0A💰 Total: Rp ${total.toLocaleString('id-ID')}%0A💳 Bayar via QRIS%0A%0ATerima kasih.`;
+        const adminWA = "62882006478095";
+        showModal("Konfirmasi kirim ke WhatsApp?", () => {
+            window.open(`https://wa.me/${adminWA}?text=${waMsg}`, '_blank');
+        });
+    }
+
+    function openCS() {
+        window.open('https://wa.me/62882006478095?text=Halo%20CS%20Hana%20Up%20saya%20butuh%20bantuan', '_blank');
+    }
+
+    document.getElementById('backBtn').addEventListener('click', () => slideTo('menu'));
+    document.getElementById('submitOrderBtn').addEventListener('click', finishOrder);
+    document.getElementById('qtyField').addEventListener('input', updateTotalPrice);
+    document.getElementById('waFloatBtn').addEventListener('click', openCS);
+
+    // LOADING
+    let perc = 0;
+    const fillLoad = document.getElementById('loadFill');
+    const loadScreen = document.getElementById('loadingScreen');
+    const mainApp = document.getElementById('appMain');
+    const interval = setInterval(() => {
+        perc += Math.floor(Math.random() * 12) + 5;
+        if(perc >= 100) {
+            perc = 100;
+            clearInterval(interval);
+            setTimeout(() => {
+                loadScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loadScreen.style.display = 'none';
+                    mainApp.style.display = 'block';
+                }, 500);
+            }, 200);
+        }
+        fillLoad.style.width = perc + '%';
+    }, 130);
+
+    renderCards();
+</script>
+</body>
+</html>
